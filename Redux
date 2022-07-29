@@ -474,7 +474,116 @@ console.log(store.getState());
 
 //Redux CODE:
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+const REQUESTING_DATA = 'REQUESTING_DATA'
+const RECEIVED_DATA = 'RECEIVED_DATA'
 
+const requestingData = () => { return {type: REQUESTING_DATA} }
+const receivedData = (data) => { return {type: RECEIVED_DATA, users: data.users} }
+
+const handleAsync = () => {
+  return function(dispatch) {
+    // Dispatch request action here
+    dispatch(requestingData());
+    setTimeout(function() {
+      let data = {
+        users: ['Jeff', 'William', 'Alice']
+      }
+      // Dispatch received data action here
+      dispatch(receivedData(data));
+    }, 2500);
+  }
+};
+
+const defaultState = {
+  fetching: false,
+  users: []
+};
+
+const asyncDataReducer = (state = defaultState, action) => {
+  switch(action.type) {
+    case REQUESTING_DATA:
+      return {
+        fetching: true,
+        users: []
+      }
+    case RECEIVED_DATA:
+      return {
+        fetching: false,
+        users: action.users
+      }
+    default:
+      return state;
+  }
+};
+
+const store = Redux.createStore(
+  asyncDataReducer,
+  Redux.applyMiddleware(ReduxThunk.default)
+);
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+//Write a Counter with Redux
+//Now you've learned all the core principles of Redux! 
+//You've seen how to create actions and action creators, create a Redux store, dispatch your actions against the store, 
+//    and design state updates with pure reducers. 
+//You've even seen how to manage complex state with reducer composition and handle asynchronous actions. 
+//These examples are simplistic, but these concepts are the core principles of Redux. 
+//If you understand them well, you're ready to start building your own Redux app. 
+//The next challenges cover some of the details regarding 'state' immutability, but first, here's a review of everything you've learned so far.
 
+//In this lesson, you'll implement a simple counter with Redux from scratch. 
+//The basics are provided in the code editor, but you'll have to fill in the details! 
+//Use the names that are provided and define 'incAction' and 'decAction' action creators, 
+//    the 'counterReducer()', 'INCREMENT' and 'DECREMENT' action types, and finally the Redux store. 
+//Once you're finished you should be able to dispatch 'INCREMENT' or 'DECREMENT' actions to increment or decrement the state held in the 'store'. 
+//Good luck building your first Redux app!
+
+//Redux CODE:
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+const INCREMENT = "INCREMENT"; // Define a constant for increment action types
+const DECREMENT = "DECREMENT"; // Define a constant for decrement action types
+
+const counterReducer = (state = 0, action) => {
+  switch(action.type) {
+    case INCREMENT:
+    return state+=1;
+    case DECREMENT:
+    return state-=1;
+    default:
+    return state;
+  }
+}; // Define the counter reducer which will increment or decrement the state based on the action it receives
+
+const incAction = () => {return {type: INCREMENT}}; // Define an action creator for incrementing
+
+const decAction = () => {return {type: DECREMENT}};  // Define an action creator for decrementing
+
+const store = Redux.createStore(counterReducer); // Define the Redux store here, passing in your reducers
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+//Never Mutate State
+//These final challenges describe several methods of enforcing the key principle of state immutability in Redux. 
+//Immutable state means that you never modify state directly, instead, you return a new copy of state.
+
+//If you took a snapshot of the state of a Redux app over time, 
+//    you would see something like 'state 1', 'state 2', 'state 3','state 4', '...' and so on where each state may be similar to the last, 
+//    but each is a distinct piece of data. 
+//This immutability, in fact, is what provides such features as time-travel debugging that you may have heard about.
+
+//Redux does not actively enforce state immutability in its store or reducers, that responsibility falls on the programmer. 
+//Fortunately, JavaScript (especially ES6) provides several useful tools you can use to enforce the immutability of your state, 
+//    whether it is a 'string', 'number', 'array', or 'object'. 
+//Note that strings and numbers are primitive values and are immutable by nature. 
+//In other words, 3 is always 3. You cannot change the value of the number 3. 
+//An 'array' or 'object', however, is mutable. 
+//In practice, your state will probably consist of an 'array' or 'object', as these are useful data structures for representing many types of information.
+
+//There is a 'store' and 'reducer' in the code editor for managing to-do items. 
+//Finish writing the 'ADD_TO_DO' case in the reducer to append a new to-do to the state. 
+//There are a few ways to accomplish this with standard JavaScript or ES6. 
+//See if you can find a way to return a new array with the item from 'action.todo' appended to the end.
+
+//Redux CODE:
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
