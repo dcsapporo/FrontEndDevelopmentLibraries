@@ -89,9 +89,95 @@
 </html>
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-//
+//Second Attempt
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <meta name="twitter:image" content="https://shots.codepen.io/freeCodeCamp/pen/qRZeGZ-800.jpg?version=1604690335">
+  <title>FCC : Random Quote Machine</title>
+  <script>
+  const QUOTEBANK = [{
+    quote: '\"One must be more open to opposing views in this world.\"',
+    author: "Don Buchla"
+  },
+  {
+    quote: '\“It would be egotistical of me to say my ideas were my own. I believe that there is a network of ideas, and the ideas come through me.\”',
+    author: "Robert Moog"
+  },
+  {
+    quote: '\"If you want to find the secrets of the universe, think in terms of energy, frequency, and vibration.\"',
+    author: "Nikola Tesla"
+  },
+  {
+    quote: '\"Never trust a computer you can\'t throw out a window.\"',
+    author: "Steve Wozniak"
+  },
+  {
+    quote: '\"Your visions will become clear only when you can look into your own heart. Who looks outside, dreams; who looks inside, awakes.\"',
+    author: "Carl Gustav Jung"
+  },
+  {
+    quote: '\“Music is a moral law. It gives soul to the universe, wings to the mind, flight to the imagination, and charm and gaiety to life and to everything.\"',
+    author: "Plato"
+  },
+  {
+    quote: '\“If you love what you do and are willing to do what it takes, it\’s within your reach. And it\’ll be worth every minute you spend alone at night, thinking and thinking about what it is you want to design or build. It\’ll be worth it, I promise.\"',
+    author: "Steve Wozniak"
+  },
+  {
+    quote: '\“One good song with a message can bring a point more deeply to more people than a thousand rallies.\"',
+    author: "Phil Ochs"
+  },
+  {
+    quote: '\“Be alone, that is the secret of invention; be alone, that is when ideas are born.\"',
+    author: "Nikola Tesla"
+  },
+  {
+    quote: '\“I think that electronic technology offers us the possibility of divorcing ourselves from the necessity of virtuosity without divorcing ourselves from the possibility of intense and meaningful interaction with our instruments.\"',
+    author: "Don Buchla"
+  },
+  {
+    quote: '\"Everything has some consciousness, and we tap into that.\"',
+    author: "Robert Moog"
+  },
+  {
+    quote: '\“Don never liked the word \‘synthesizer\’ because it implies mimicking something else when he wanted to create new sounds and new ways to interact with musical instruments.\"',
+    author: "David Buchla"
+  },
+  {
+    quote: '\“It is wrong to expect a reward for your struggles. The reward is the act of struggle itself, not what you win. Even though you can\’t expect to defeat the absurdity of the world, you must make that attempt. That\'s morality, that\'s religion. That\’s art. That\'s life.\"',
+    author: "Phil Ochs"
+  }];
 
+    window.onload = onFirstLoad;
+    function onFirstLoad() {
+      generateQuote()
+    };
+    function generateQuote() {
+      let quoteLength =  QUOTEBANK.length;
+      let getAQuote = Math.floor(Math.random() * quoteLength);
+      document.getElementById("text").innerText = QUOTEBANK[getAQuote].quote;
+      document.getElementById("author").innerText = QUOTEBANK[getAQuote].author;
+    };
+
+  </script>
+  <style>
+    * { font-size: 2rem; }
+  </style>
+</head>
+<body>
+<wrapper id="quote-box">
+  <div id="text"></div>
+  <div id="author"></div>
+  <button id="new-quote" onClick="generateQuote()"  >New Quote</button>
+  <a src="#" href="twitter.com/intent/tweet" id="tweet-quote">Tweet Quote</a>
+</wrapper>
+  <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+</body>
+</html>
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 //
