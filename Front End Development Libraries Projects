@@ -180,7 +180,7 @@
 </html>
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-//Third Version Pass all requirements but it is not using React, so following version will be using React
+//Third Version Pass all requirements but it is not using React
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 <!DOCTYPE html>
 <html lang="en">
@@ -284,8 +284,197 @@
 </html>
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+//Final Solution without React
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <meta name="twitter:image" content="https://shots.codepen.io/freeCodeCamp/pen/qRZeGZ-800.jpg?version=1604690335">
+  <title>FCC : Random Quote Machine</title>
+  <link rel="stylesheet"  href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,800"/>
+  <script src="https://kit.fontawesome.com/a2d014ced7.js" crossorigin="anonymous"></script>
+  <script>
+  const QUOTEBANK = [{
+    quote: '\"One must be more open to opposing views in this world.\"',
+    author: "- Don Buchla"
+  },
+  {
+    quote: '\“It would be egotistical of me to say my ideas were my own. I believe that there is a network of ideas, and the ideas come through me.\”',
+    author: "- Robert Moog"
+  },
+  {
+    quote: '\"If you want to find the secrets of the universe, think in terms of energy, frequency, and vibration.\"',
+    author: "- Nikola Tesla"
+  },
+  {
+    quote: '\"Never trust a computer you can\'t throw out a window.\"',
+    author: "- Steve Wozniak"
+  },
+  {
+    quote: '\"Your visions will become clear only when you can look into your own heart. Who looks outside, dreams; who looks inside, awakes.\"',
+    author: "- Carl Gustav Jung"
+  },
+  {
+    quote: '\“Music is a moral law. It gives soul to the universe, wings to the mind, flight to the imagination, and charm and gaiety to life and to everything.\"',
+    author: "- Plato"
+  },
+  {
+    quote: '\“If you love what you do and are willing to do what it takes, it\’s within your reach. And it\’ll be worth every minute you spend alone at night, thinking and thinking about what it is you want to design or build. It\’ll be worth it, I promise.\"',
+    author: "- Steve Wozniak"
+  },
+  {
+    quote: '\“One good song with a message can bring a point more deeply to more people than a thousand rallies.\"',
+    author: "- Phil Ochs"
+  },
+  {
+    quote: '\“Be alone, that is the secret of invention; be alone, that is when ideas are born.\"',
+    author: "- Nikola Tesla"
+  },
+  {
+    quote: '\“I think that electronic technology offers us the possibility of divorcing ourselves from the necessity of virtuosity without divorcing ourselves from the possibility of intense and meaningful interaction with our instruments.\"',
+    author: "- Don Buchla"
+  },
+  {
+    quote: '\"Everything has some consciousness, and we tap into that.\"',
+    author: "- Robert Moog"
+  },
+  {
+    quote: '\“Don never liked the word \‘synthesizer\’ because it implies mimicking something else when he wanted to create new sounds and new ways to interact with musical instruments.\"',
+    author: "- David Buchla"
+  },
+  {
+    quote: '\“It is wrong to expect a reward for your struggles. The reward is the act of struggle itself, not what you win. Even though you can\’t expect to defeat the absurdity of the world, you must make that attempt. That\'s morality, that\'s religion. That\’s art. That\'s life.\"',
+    author: "- Phil Ochs"
+  }];
+
+    window.onload = onFirstLoad;
+    function onFirstLoad() {
+      generateQuote()
+    };
+    function generateQuote() {
+      let quoteLength =  QUOTEBANK.length;
+      let quoteIndex = Math.floor(Math.random() * quoteLength);
+      let getAQuote = QUOTEBANK[quoteIndex];
+
+      let twitterLink = "https://twitter.com/intent/tweet?hashtags=quotes&amp;text=";
+
+      let quotePrep = getAQuote.quote.replace(/\s/g, "%20").replace(/^[\W]/, "%22").replace(/[\W]$/, "%22");
+      let authorPrep = getAQuote.author.replace(/\s/g, "%20");
+      let quoteAuthorFormat = quotePrep.concat(authorPrep);
+      twitterLink = twitterLink.concat(quoteAuthorFormat);
+
+      document.getElementById("tweet-quote").href = twitterLink;
+      document.getElementById("text").innerText = getAQuote.quote;
+      document.getElementById("author").innerText = getAQuote.author;
+    };
+  </script>
+  <style>
+    body {
+      background: green;
+      animation: bodyMood 15s ease-in-out infinite;
+      }
+    @keyframes bodyMood {
+        25% {
+          background-color: orange;
+        }
+        50% {
+          background-color: purple;
+        }
+        75% {
+          background-color: orange;
+        }
+      }
+    #new-quote:hover {
+      background-color: lightgray;
+      border-radius: 10%;
+      }
+    wrapper {
+      background-color: #282c34;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: calc(10px + 2vmin);
+      color: white;
+      }
+    .tweet {
+      color: skyblue;
+      text-decoration: none;
+    }
+    .tweet:hover {
+      color: lightgray;
+    }
+  </style>
+</head>
+<body>
+
+  <wrapper id="quote-box">
+    <div id="text"></div>
+    <div id="author"></div>
+    <button id="new-quote" onClick="generateQuote()"  >New Quote</button>
+    <div></div>
+    <a class="tweet" target="_blank" href="#" id="tweet-quote">
+      <i class="fa fa-twitter" aria-hidden="true">Tweet Quote</i>
+    </a>
+
+  </wrapper>
+  <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+
+</body>
+</html>
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+//React version
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+////////////////////////////////////////////////////Build a Markdown Previewer
+//Objective: Build an app that is functionally similar to this: https://codepen.io/freeCodeCamp/full/GrZVVO.
+
+//Fulfill the below user stories and get all of the tests to pass. 
+//Use whichever libraries or APIs you need. 
+//Give it your own personal style.
+
+//You can use any mix of HTML, JavaScript, CSS, Bootstrap, SASS, React, Redux, 
+//    and jQuery to complete this project. You should use a frontend framework 
+//    (like React for example) because this section is about learning frontend frameworks. 
+//Additional technologies not listed above are not recommended and using them is at your own risk. 
+//We are looking at supporting other frontend frameworks like Angular and Vue, but they are not currently supported. 
+//We will accept and try to fix all issue reports that use the suggested technology stack for this project. Happy coding!
+
+//    User Story #1: I can see a 'textarea' element with a corresponding 'id="editor"'.
+
+//    User Story #2: I can see an element with a corresponding 'id="preview"'.
+
+//    User Story #3: When I enter text into the '#editor' element, the '#preview' element is updated as I type to display the content of the textarea.
+
+//    User Story #4: When I enter GitHub flavored markdown into the '#editor' element, 
+//    the text is rendered as HTML in the '#preview' element as I type 
+//    (HINT: You don't need to parse Markdown yourself - you can import the Marked library for this: https://cdnjs.com/libraries/marked).
+
+//    User Story #5: When my markdown previewer first loads, the default text in the '#editor' field should 
+//    contain valid markdown that represents at least one of each of the following elements: a heading element (H1 size), 
+//    a sub heading element (H2 size), a link, inline code, a code block, a list item, a blockquote, an image, and bolded text.
+
+//    User Story #6: When my markdown previewer first loads, the default markdown in the '#editor' field should be rendered as 
+//    HTML in the '#preview' element.
+
+//Optional Bonus (you do not need to make this test pass): 
+//    My markdown previewer interprets carriage returns and renders them as 'br' (line break) elements.
+
+//You can build your project by using this CodePen template and clicking 'Save' to create your own pen. 
+//Or you can use this CDN link to run the tests in any environment you like: 'https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js'
+
+//Once you're done, submit the URL to your working project with all its tests passing.
+
 //
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 
