@@ -953,14 +953,221 @@ over look simple errors when debugging code.
 
 //The CODE:
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\First Successful Attempt\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ///HTML
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - React Redux Drum Machine</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-bootstrap/0.5pre/assets/css/bootstrap.min.css'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/slider-pro/1.6.0/css/slider-pro.min.css'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/avalanche-css/1.3.1/avalanche.min.css'>
+<link rel='stylesheet' href='https://unpkg.com/@popperjs/core@2/dist/umd/popper.js'><link rel="stylesheet" href="./style.css">
 
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div id="App">
+</div>
+<script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/redux/4.2.0/redux.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0/js/bootstrap.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.4.1/redux-thunk.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jsonform/2.2.5/jsonform.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/react-hooks-global-state/2.0.0/index.umd.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/pwacompat/2.0.17/pwacompat.min.js'></script><script type="module" src="./script.js"></script>
+
+</body>
+</html>
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ///SCSS
+@import url("https://fonts.googleapis.com/css?family=Russo+One");
+* {
+  box-sizing: border-box;
+}
 
+body {
+  background-color: lightblue;
+  margin: 0;
+}
+
+.toolbar {
+  display: flex;
+  align-items: relative;
+  justify-content: center;
+}
+
+#leftSide, #rightSide {
+  display: flex;
+  background-color: white;
+  border-radius: 9px;
+}
+
+#leftSide {
+  align-items: right;
+  justify-content: right;
+}
+
+.padContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+#drum-pad {
+  width: 100px;
+  height: 80px;
+  border-radius: 9px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: relative;
+  justify-content: relative;
+  margin: 3px;
+}
+
+#drum-pad:hover {
+  border: 2px solid #37E2D5;
+}
+
+#drum-pad.active {
+  background-color: #37E2D5;
+  opacity: 100;
+  transform: scale(0.98);
+}
+
+#padBox {
+  border: 2px solid black;
+  border-radius: 9px;
+  display: flex;
+  align-items: relative;
+  justify-content: relative;
+  margin: auto;
+  height: auto;
+  width: auto;
+}
+
+.padDisplay {
+  background-color: gohstwhite;
+  border-radius: 9px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+  height: 300px;
+  width: 360px;
+}
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ///React Redux
+unction _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}import React, { useState, useEffect } from "https://cdn.skypack.dev/react@17.0.1";
 
+const toneBank = [
+  {keyboarCode: 81,
+   key: "Q",
+   id: "Chord-1",
+   sample:"https://s3.amazonaws.com/freecodecamp/drums/Chord_1.mp3" },
+  {keyboarCode: 87,
+   key: "W",
+   id: "Chord-2",
+   sample:"https://s3.amazonaws.com/freecodecamp/drums/Chord_2.mp3" },
+  {keyboarCode: 69,
+   key: "E",
+   id: "Chord-3",
+   sample:"https://s3.amazonaws.com/freecodecamp/drums/Chord_3.mp3" },
+  {keyboarCode: 65,
+   key: "A",
+   id: "Shaker",
+   sample:"https://s3.amazonaws.com/freecodecamp/drums/Give_us_a_light.mp3" },
+  {keyboarCode: 83,
+   key: "S",
+   id: "Open-HH",
+   sample:"https://s3.amazonaws.com/freecodecamp/drums/Dry_Ohh.mp3" },
+  {keyboarCode: 68,
+   key: "D",
+   id: "Closed-HH",
+   sample:"https://s3.amazonaws.com/freecodecamp/drums/Bld_H1.mp3" },
+  {keyboarCode: 90,
+   key: "Z",
+   id: "Punchy-Kick",
+   sample:"https://s3.amazonaws.com/freecodecamp/drums/punchy_kick_1.mp3" },
+  {keyboarCode: 88,
+   key: "X",
+   id: "Side-Stick",
+   sample:"https://s3.amazonaws.com/freecodecamp/drums/side_stick_1.mp3" },
+  {keyboarCode: 67,
+   key: "C",
+   id: "Snare",
+   sample:"https://s3.amazonaws.com/freecodecamp/drums/Brk_Snr.mp3" }
+  ];
+
+
+
+const keys = ["Q", "W", "E", "A", "S", "D", "Z", "X", "C"];
+
+
+const Pads = () => /*#__PURE__*/
+React.createElement("div", { className: "padDisplay drum-pad", id: "display" },
+
+keys.map((key, idx) => /*#__PURE__*/React.createElement(Pad, { className: "drum-pad", id: toneBank[idx].id, text: toneBank[idx].keyTrigger, code: toneBank[idx].keyCode, audio: toneBank[idx].url })));
+
+
+
+class DrumMachine extends React.Component {
+  constructor(props) {
+    super(props);
+
+  }
+  render() {
+
+    return /*#__PURE__*/(
+      React.createElement("div", null, /*#__PURE__*/
+      React.createElement("div", { id: "drum-machine", className: "container-fluid" }, /*#__PURE__*/
+      React.createElement("div", { className: "toolbar", id: "controls" }, /*#__PURE__*/
+      React.createElement("div", { className: "col-sm-6", id: "leftSide" }, /*#__PURE__*/
+      React.createElement("button", { className: "power", type: "button", className: "btn btn-outline-success shadow" }, "Power")), /*#__PURE__*/
+
+      React.createElement("div", { className: "col-sm-4", id: "centerTitle" }, /*#__PURE__*/
+      React.createElement("h1", { className: "text-center" }, "Machine")), /*#__PURE__*/
+
+      React.createElement("div", { className: "col-sm-6", id: "rightSide" }, /*#__PURE__*/
+      React.createElement("button", { className: "tones", type: "button", className: "btn btn-outline-primary shadow" }, "Tones"))), /*#__PURE__*/
+
+
+
+
+      React.createElement("div", { className: "padContainer container-fluid" }, /*#__PURE__*/
+
+      React.createElement("div", { id: "padBox" }, /*#__PURE__*/
+      React.createElement(Pads, { id: this.id, className: "drum-pad" }))))));
+
+  }}
+;
+
+class Pad extends React.Component {
+  constructor(props) {
+    super(props);_defineProperty(this, "playSound",
+
+
+
+    () => {
+      console.log(this.audio.current);
+      this.audio.current.play();
+    });this.audio = React.createRef();}
+
+  render() {
+    const { text, audio } = this.props;
+    return /*#__PURE__*/(
+      React.createElement("div", { className: "pad" }, " ", /*#__PURE__*/React.createElement("button", { id: "drum-pad", type: "button", className: "btn shadow", onClick: this.playSound }, text, " "), /*#__PURE__*/
+      React.createElement("audio", { ref: this.audio, src: audio, className: "clip" })));
+
+
+  }}
+
+ReactDOM.render( /*#__PURE__*/React.createElement(DrumMachine, null), document.getElementById("App"));
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
