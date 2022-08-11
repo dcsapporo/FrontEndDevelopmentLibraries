@@ -1352,7 +1352,7 @@ input {
 import * as React from "https://cdn.skypack.dev/react@17.0.1"
 import * as ReactDOM from "https://cdn.skypack.dev/react-dom@17.0.1"
 
-
+//Following are the Sample Bank Arrays that supply the sounds and names for each pad and keyCode
 const bankOne = [
   {
     keyCode: 81,
@@ -1465,30 +1465,36 @@ const bankTwo = [
     url: 'https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3'
   }
 ];
-
+//Following is the object that provides the kit name
 const kitName = {
   smoothPianoKit: "Smooth Piano Kit",
   heaterKit: "Heater Kit"
 }
-
+//The following is used to link each object within each of the Sample Bank Arrays
 const sampleBank = {
   smoothPianoKit: bankOne,
   heaterKit: bankTwo
 }
 
 
-
+/*This is the function that assigns each of the objects within
+the Sample Bank Arrays their sample sounds, unique names,
+keyCode, letter and enables the application to respond to the
+users keyboard to trigger the sound samples*/
 const DrumPads = ({ play, sample: { keyTrigger, id, url, keyCode } }) => {
-  
+/*Conditional Function that handles associating key strocks to
+trigger the sound samples and generates the html for the drum
+pads*/ 
   const keydownHandler = (event) => {
     if(event.keyCode === keyCode) {
       play(keyTrigger, id)
     }
   }
-  
+//React hook that actually enables key strocks to interact with the application  
   React.useEffect(() => {
     document.addEventListener("keydown", keydownHandler)
   }, [])
+//returns each sound sample, id and letter as an HTML garphic image and playable audio
   return ( 
     <button className="drum-pad btn shadow" type="button" id={id} onClick={() => play(keyTrigger, id)}>
         <audio id={keyTrigger} className="clip" src={url} />
@@ -1496,13 +1502,13 @@ const DrumPads = ({ play, sample: { keyTrigger, id, url, keyCode } }) => {
     </button>
   )
 };
-
+//Parent of the DrumPads function
 const Interface = ({ power, play, samples }) => ( 
   <div className="interface">
     {power ? samples.map((sample)=> <DrumPads play={play} sample={sample} />) : samples.map((sample)=> <DrumPads play={play} sample={{...sample, url:"#"}} />)}
   </div>
 );
-
+//Creates the controls used to change sound samples, volume and mute the drum machine
 const MachineControls = ({ stop, power, name, volume, volumeControlHandler, bankSelector }) => (
   <div className="controls">
     <div className="leftSide">
@@ -1525,7 +1531,7 @@ const MachineControls = ({ stop, power, name, volume, volumeControlHandler, bank
     </div>
   </div>
 )
-
+//Main Parent that pass all object elements and control functionality
 const DrumMachine = () => {
   const [power, setPower] = React.useState(true);
   const [volume, setVolume] = React.useState(1);
@@ -1545,10 +1551,10 @@ const DrumMachine = () => {
     audio.parentElement.style.backgroundColor = "#B1E1FF"
   };
   
-  const releaseTriggeredStyle = () => {
+  const releaseTriggeredStyle = (audio) => {
     setTimeout(() => {
       audio.parentElement.style.backgroundColor = "#ffffff"
-    }, 150)
+    }, 250)
   };
   
   const play = (key, sample) => {
