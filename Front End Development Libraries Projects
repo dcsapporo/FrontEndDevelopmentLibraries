@@ -1685,14 +1685,655 @@ ReactDOM.render(<DrumMachine />, document.getElementById("app"));
 //Once you're done, submit the URL to your working project with all its tests passing.
 
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-//////////////////////
+//////////////////////HTML
+<div id="app">
+  <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+</div>
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+////////////////////////CSS
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: futura;
+}
+
+body {
+  background: linear-gradient(to right, #00FF6C, #00AAFF);
+}
+
+.app-title {
+  padding: 10px;
+  margin: 10px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  z-index: 0;
+  color: rgba(0, 0, 0, .45);
+}
+
+.container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calculator {
+  height: 445px;
+  max-width: 460px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, .16);
+}
+
+.output {
+  height: 80px;
+  background-color: rgba(0, 0, 0, .15);
+}
+
+.keys {
+  gap: 5px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  background-color: rgba(0, 0, 0, .69);
+}
+
+.keys button:first-child {
+  color: #ffffff;
+  grid-column-end: 3;
+  grid-column-start: 1;
+  background-color: #ac3939;
+}
+
+.keys button:nth-child(2) {
+  color: #ffffff;
+  background-color: #561a56;
+}
+
+.keys button:nth-child(3), 
+.keys button:nth-child(7),
+.keys button:nth-child(11),
+.keys button:nth-child(15){
+  background-color: #666666
+}
+
+.keys button:nth-child(18) {
+  color: #ffffff;
+  grid-row: 5 / 5;
+  grid-column: 3 / 5;
+  background-color: #004466;
+}
+
+.keys button:nth-child(16) {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+button:hover,
+ button:focus {
+    border: 1px solid white;
+    background-color: rgba(255, 255, 255, .9);
+}
+
+.input,
+.result {
+  color:#fff;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 40px;
+  text-align: right;
+  padding-right: 10px;
+  background-color: rgba(0, 0, 0, .60);
+  justify-content: space-around;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.input {
+  color: white;
+  font-size: 2.5rem;
+}
+
+.result {
+  color: rgba(255, 255, 255, 0.694);
+  font-size: 1.5rem;
+}
+
+button {
+  border: none;
+  font-size: 28px;
+  min-width: 80px;
+  min-height: 65px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, .75);
+}
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//////////////////////REACT
+const BUTTONARRAY = [
+  { id: "clear", value: "AC" },
+  { id: "delete", value: "DEL" },
+  { id: "multiply", value: "x" },
+  { id: "one", value: 1 },
+  { id: "two", value: 2 },
+  { id: "three", value: 3 },
+  { id: "divide", value: "/" },
+  { id: "four", value: 4 },
+  { id: "five", value: 5 },
+  { id: "six", value: 6 },
+  { id: "add", value: "+" },
+  { id: "seven", value: 7 },
+  { id: "eight", value: 8 },
+  { id: "nine", value: 9 },
+  { id: "subtract", value: "-" },
+  { id: "decimal", value: "." },
+  { id: "zero", value: 0 },
+  { id: "equals", value: "=" }
+];
+
+const NUMBERS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+const OPERATORS = ["AC","DEL","x","/","+","-","="];
+
+
+
+function Display({ input, output }) {
+  return (
+    <div className="output">
+      <span className="result">{output}</span>
+      <span id="display" className="input">{input}</span>
+    </div>
+  );
+}
+
+function KeyPad({ keyPadData: { id, value }, inputHandler }) {
+  return (
+    <button id={id} onClick={() => inputHandler(value)}>
+      {value}
+    </button>
+  );
+}
+
+function KeyPadGrid({ inputHandler }) {
+  return (
+    <div className="keys">
+      {BUTTONARRAY.map((pad) => (
+        <KeyPad key={pad.id} keyPadData={pad} inputHandler={inputHandler} />
+      ))}
+    </div>
+  );
+}
+
+function Calculator() {
+  const [input, setInput] = React.useState("0")
+  const [output, setOutput] = React.useState("")
+  const [operationData, setOperationData] = React.useState("")
+  
+  const evaluateHandler = () => {
+    console.log("evaluateHandler", operationData)
+    const total = eval(operationData)
+    setInput(`${total}`)
+    setOutput(`${total}`)
+    setOperationData(`${total}`)
+  }
+  
+  const clearHandler = () => {
+    setInput("0")
+    setOutput("")
+    setOperationData("")
+  }
+  
+  const deleteHandler = (value) => {
+    if (output === null) {
+      setOutput('')
+      setInput('0')
+      setOperationData("")} else
+    if (output.length === 1) {
+      setOutput('')
+      setInput('0')
+      setOperationData("")
+    } else {
+    setOutput(output.slice(0, -1))
+    setInput(input.slice(0, -1))
+    setOperationData(output.slice(0, -1))
+    }
+  }
+  
+  const numberHandler = (value) => {
+    console.log(value);
+    if (!operationData.length) {
+      setInput(`${value}`);
+      setOperationData(`${value}`);
+    } else {
+      if (value === 0 && (operationData === "0" || input === "0")) {
+        setOperationData(`${operationData}`);
+      } else {
+        const lastChat = operationData.charAt(operationData.length - 1);
+        const isLastChatOperator = lastChat === "*" || OPERATORS.includes(lastChat);
+        
+        setInput(isLastChatOperator ? `${value}` : `${input}${value}`);
+        setOperationData(`${operationData}${value}`);
+      }
+    }
+  }
+  
+  const decimalHandler = () => {
+    const lastChat = operationData.charAt(operationData.length - 1);
+    if (!operationData.length) {
+      setInput("0.");
+      setOperationData("0.");
+    } else {
+      if (lastChat === "*" || OPERATORS.includes(lastChat)) {
+        setInput("0.");
+        setOperationData(`${operationData} 0.`);
+      } else {
+      setInput(
+        lastChat === "." || input.includes(".") ? `${input}` : `${input}.`
+      );
+      const formattedValue =
+            lastChat === "." || input.includes(".")
+              ? `${operationData}`
+              : `${operationData}.`;
+      setOperationData(formattedValue);
+      }
+    }
+  }
+  
+  const operatorHandler = (value) => {
+    if (operationData.length) {
+      setInput(`${value}`);
+      const beforeLastChat = operationData.charAt(operationData.length - 2);
+      
+      const beforeLastChatIsOperator = 
+            OPERATORS.includes(beforeLastChat) || beforeLastChat === "*";
+      
+      const lastChat = operationData.charAt(operationData.length - 1);
+      
+      const lastChatIsOperator = OPERATORS.includes(lastChat) || lastChat === "*";
+      
+      const validAction = value === "x" ? "*" : value;
+      if (
+        (lastChatIsOperator && value !== "-") ||
+        beforeLastChatIsOperator && lastChatIsOperator) {
+        if (beforeLastChatIsOperator) {
+          const updateValue = `${operationData.substring(0,
+             operationData.length - 2)}${value}`;
+          setOperationData(updateValue);
+        } else {
+          setOperationData(`${operationData.substring(0, operationData.length - 1)}${validAction}`);
+        }
+      } else {
+        setOperationData(`${operationData}${validAction}`);
+      }
+    }
+  }
+  
+  
+  const inputHandler = (value) => {
+    
+    const number = NUMBERS.find((digit) => digit === value);
+    const operator = OPERATORS.find((action) => action === value);
+    
+    console.log(value);
+    console.log(number);
+    
+    switch (value) {
+      case "=":
+        evaluateHandler();
+        break;
+      case "AC":
+        clearHandler();
+        break;
+      case "DEL":
+        deleteHandler();
+        break;
+      case number:
+        numberHandler(value);
+        break;
+      case ".":
+        decimalHandler();
+        break;
+      case operator:
+        operatorHandler(value);
+        break;
+      default:
+        break;
+    }
+  }
+  
+  const outputHandler = () => {
+    setOutput(operationData)
+  }
+  
+  React.useEffect(() => {
+    outputHandler()
+  }, [operationData]);
+  
+ return (
+  <div>
+   <h1 className="app-title">JSX Calculator with Hooks</h1>
+   <div className="container">
+     <div className="calculator">
+       <Display input={input} output={output} />
+       <KeyPadGrid inputHandler={inputHandler} />
+     </div>
+   </div>
+  </div>
+ );
+}
+
+ReactDOM.render(<Calculator />, document.getElementById('app'));
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Build a 25 + 5 Clock
+Objective: Build an app that is functionally similar to this: https://codepen.io/freeCodeCamp/full/XpKrrW.
+
+Fulfill the below user stories and get all of the tests to pass. Use whichever libraries or APIs you need. Give it your own personal style.
+
+You can use any mix of HTML, JavaScript, CSS, Bootstrap, SASS, React, Redux, and jQuery to complete this project. You should use a frontend framework (like React for example) because this section is about learning frontend frameworks. Additional technologies not listed above are not recommended and using them is at your own risk. We are looking at supporting other frontend frameworks like Angular and Vue, but they are not currently supported. We will accept and try to fix all issue reports that use the suggested technology stack for this project. Happy coding!
+
+User Story #1: I can see an element with id="break-label" that contains a string (e.g. "Break Length").
+
+User Story #2: I can see an element with id="session-label" that contains a string (e.g. "Session Length").
+
+User Story #3: I can see two clickable elements with corresponding IDs: id="break-decrement" and id="session-decrement".
+
+User Story #4: I can see two clickable elements with corresponding IDs: id="break-increment" and id="session-increment".
+
+User Story #5: I can see an element with a corresponding id="break-length", which by default (on load) displays a value of 5.
+
+User Story #6: I can see an element with a corresponding id="session-length", which by default displays a value of 25.
+
+User Story #7: I can see an element with a corresponding id="timer-label", that contains a string indicating a session is initialized (e.g. "Session").
+
+User Story #8: I can see an element with corresponding id="time-left". NOTE: Paused or running, the value in this field should always be displayed in mm:ss format (i.e. 25:00).
+
+User Story #9: I can see a clickable element with a corresponding id="start_stop".
+
+User Story #10: I can see a clickable element with a corresponding id="reset".
+
+User Story #11: When I click the element with the id of reset, any running timer should be stopped, the value within id="break-length" should return to 5, the value within id="session-length" should return to 25, and the element with id="time-left" should reset to its default state.
+
+User Story #12: When I click the element with the id of break-decrement, the value within id="break-length" decrements by a value of 1, and I can see the updated value.
+
+User Story #13: When I click the element with the id of break-increment, the value within id="break-length" increments by a value of 1, and I can see the updated value.
+
+User Story #14: When I click the element with the id of session-decrement, the value within id="session-length" decrements by a value of 1, and I can see the updated value.
+
+User Story #15: When I click the element with the id of session-increment, the value within id="session-length" increments by a value of 1, and I can see the updated value.
+
+User Story #16: I should not be able to set a session or break length to <= 0.
+
+User Story #17: I should not be able to set a session or break length to > 60.
+
+User Story #18: When I first click the element with id="start_stop", the timer should begin running from the value currently displayed in id="session-length", even if the value has been incremented or decremented from the original value of 25.
+
+User Story #19: If the timer is running, the element with the id of time-left should display the remaining time in mm:ss format (decrementing by a value of 1 and updating the display every 1000ms).
+
+User Story #20: If the timer is running and I click the element with id="start_stop", the countdown should pause.
+
+User Story #21: If the timer is paused and I click the element with id="start_stop", the countdown should resume running from the point at which it was paused.
+
+User Story #22: When a session countdown reaches zero (NOTE: timer MUST reach 00:00), and a new countdown begins, the element with the id of timer-label should display a string indicating a break has begun.
+
+User Story #23: When a session countdown reaches zero (NOTE: timer MUST reach 00:00), a new break countdown should begin, counting down from the value currently displayed in the id="break-length" element.
+
+User Story #24: When a break countdown reaches zero (NOTE: timer MUST reach 00:00), and a new countdown begins, the element with the id of timer-label should display a string indicating a session has begun.
+
+User Story #25: When a break countdown reaches zero (NOTE: timer MUST reach 00:00), a new session countdown should begin, counting down from the value currently displayed in the id="session-length" element.
+
+User Story #26: When a countdown reaches zero (NOTE: timer MUST reach 00:00), a sound indicating that time is up should play. This should utilize an HTML5 audio tag and have a corresponding id="beep".
+
+User Story #27: The audio element with id="beep" must be 1 second or longer.
+
+User Story #28: The audio element with id of beep must stop playing and be rewound to the beginning when the element with the id of reset is clicked.
+
+You can build your project by using this CodePen template and clicking Save to create your own pen. Or you can use this CDN link to run the tests in any environment you like: https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js
+
+Once you're done, submit the URL to your working project with all its tests passing.
 ////////////////////////
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-//////////////////////
+//////////////////////HTML
+<div id='root'></div>
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-////////////////////////
+////////////////////////SCSS
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: futura;
+}
+
+body {
+  background: linear-gradient(to right, #D61C4E, #277BC0);
+  font-size: 24px;
+}
+
+.wrapper {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper h1 {
+  margin: 0;
+  padding: 20px;
+}
+
+.break-session-length h3 {
+  margin-left: -25px;
+}
+
+.break-session-length {
+  display: flex;
+  width: 500px;
+  padding-left: 65px;
+  justify-content: space-between;
+}
+
+button {
+  border: none;
+  padding: 8px;
+  font-size: 18px;
+  border-radius: 4px;
+}
+
+div > button {
+  color: white;
+  background-color: #1CD6CE;
+}
+
+div button:nth-child(2) {
+  color: #000;
+  background-color: #FF7F3F;
+  margin-left: 20px;
+  margin-right: 5px;
+  padding-right: 15px;
+}
+
+strong {
+  margin: 0 8px;
+}
+
+.timer {
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  text-align: center;
+  margin: 20px 0;
+  margin-right: -20px;
+  padding-top: 10px;
+}
+
+.timer-wrapper > button {
+  margin-left: 10px;
+}
+
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-//////////////////////
+//////////////////////REACT HOOKS
+function TwentyFiveFiveClock() {
+  const [breakLength, setBreakLength] = React.useState(5);
+  const [sessionLength, setSessionLength] = React.useState(25);
+  const [play, setPlay] = React.useState(false);
+  const [timingType, setTimingType] = React.useState('SESSION');
+  const [timeLeft, setTimeLeft] = React.useState(1500);
+  
+  const timeout = setTimeout(() => {
+    if (timeLeft && play) {
+      setTimeLeft(timeLeft -1)
+    }
+  }, 1000);
+  
+  const handleBreakIncrease = () => {
+    if (breakLength < 60) {
+      setBreakLength(breakLength + 1)
+    }
+  }
+  
+  const handleBreakDecrease = () => {
+    if (breakLength > 1) {
+      setBreakLength(breakLength - 1)
+    }
+  }
+  
+  const handleSessionIncrease = () => {
+    if (sessionLength < 60) {
+      setSessionLength(sessionLength + 1)
+      setTimeLeft(timeLeft + 60)
+    }
+  }
+  
+  const handleSessionDecrease = () => {
+    if (sessionLength > 1) {
+      setSessionLength(sessionLength - 1)
+      setTimeLeft(timeLeft - 60)
+    }
+  }
+ 
+  const handleReset = () => {
+    clearTimeout(timeout);
+    setPlay(false);
+    setTimeLeft(1500);
+    setBreakLength(5);
+    setSessionLength(25);
+    setTimingType('SESSION');
+    const audio = document.getElementById('beep');
+    audio.pause();
+    audio.currentTime = 0;
+  }
+  
+  const handlePlay = () => {
+    clearTimeout(timeout);
+    setPlay(!play);
+  }  
+ 
+  const resetTimer = () => {
+    const audio = document.getElementById('beep');
+    if (!timeLeft && timingType === 'SESSION') {
+      setTimeLeft(breakLength * 60)
+      setTimingType('BREAK')
+      audio.play()
+    }
+    if (!timeLeft && timingType === 'BREAK') {
+      setTimeLeft(sessionLength * 60)
+      setTimingType('SESSION')
+      audio.pause()
+      audio.currentTime = 0;
+    }
+  }
+  
+  const clock = () => {
+    if (play) {
+      timeout
+      resetTimer()
+    } else {
+      clearTimeout(timeout)
+    }
+  }
+  
+  React.useEffect(() => {
+    clock()
+  }, [play, timeLeft, timeout]);
+  
+  const timeFormatter = () => {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft - minutes * 60;
+    const formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
+    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+    return `${formattedMinutes}:${formattedSeconds}`;
+  }
+ 
+  const title = timingType === 'SESSION' ? 'Session' : 'Break';
+  
+  return (
+    <div> 
+      <div className='wrapper'>
+        <h1>25 + 5 Clock</h1>
+        <div className='break-session-length'>
+          <div>
+            <h3 id='break-label'>Break Length</h3>
+            <div>
+              <button disabled={play} onClick={handleBreakIncrease} id='break-increment'>
+                
+                <i className="fa fa-arrow-up fa-2x" />
+              </button>
+                <strong id='break-length'>{breakLength}</strong>
+              <button disabled={play} onClick={handleBreakDecrease} id='break-decrement'>
+                
+                <i className="fa fa-arrow-down fa-2x" />
+              </button>
+            </div>
+          </div>
+          <div>
+            <h3 id='session-label'>Session Length</h3>
+            <div>
+              <button disabled={play} onClick={handleSessionIncrease} id='session-increment'>
+                
+                <i className="fa fa-arrow-up fa-2x" />
+              </button>
+                <strong id='session-length'>{sessionLength}</strong>
+              <button disabled={play} onClick={handleSessionDecrease} id='session-decrement'>
+                
+                <i className="fa fa-arrow-down fa-2x" />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className='timer-wrapper'>
+          <div className='timer'>
+            <h3 id='timer-label'>{title}</h3>
+            <h3 id='time-left'>{timeFormatter()}</h3>
+          </div> 
+          <button onClick={handlePlay} id='start_stop'>
+            
+            <i className="fa fa-play fa-2x" />
+            <i className="fa fa-pause fa-2x" />
+          </button>
+          <button onClick={handleReset} id='reset'>
+            
+            <i className="fa fa-refresh fa-2x" />
+          </button>
+        </div>
+      </div>
+      <audio
+        id='beep'
+        preload='auto'
+        src='https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav' 
+      />
+    </div>
+  );
+}
+
+ReactDOM.render(<TwentyFiveFiveClock />, document.getElementById('root'));
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ////////////////////////
